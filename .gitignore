@@ -1,0 +1,10 @@
+/.bundle
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/node_modules
+/yarn-error.log
+Gemfile.lock
+.byebug_history
+.DS_Store
