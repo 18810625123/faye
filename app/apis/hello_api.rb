@@ -12,9 +12,11 @@ class HelloApi < Grape::API
 
   format :json
 
-  get 'get_online_users' do
-    if params[:channel]
-      {ok:true,msg:$waiter.online_users[params[:channel]]}
+  get 'get_users_by_channel' do
+    channel = params[:channel]
+    if channel
+      users = $waiter.online_users[channel]
+      {ok:true,msg:users}
     else
       {ok:false,msg:'缺少 channel 参数'}
     end

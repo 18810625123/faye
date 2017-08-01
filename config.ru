@@ -28,9 +28,9 @@ class FayeWaiter
   end
 
   # 用户通过rails服务器验证后,通知这边,加入列表
-  def user_online channel, id, name, head, city, des
-    @online_users[channel].store(id, {name:name, head:head, city:city, des:des})
-    puts "用户上线  #{channel}:id(#{id}),name(#{name})"
+  def user_online channel, user
+    @online_users[channel].store(user['id'], user)
+    puts "用户上线  #{channel}:id(#{user['id']}),name(#{user['name']})"
   end
 
   # 用户下线
@@ -51,21 +51,22 @@ class FayeWaiter
     if message['data']
       channel = message['channel']
       data = message['data']
-          puts "#{data['type']}:#{data['channel']}\t#{data['username']}:#{data['text']}"
-          case data['type']
-            when 'sub'
-              user_online(channel, data['id'], data['username'], data['head'], data['city'], data['des'])
-              @clientids[message['clientId']][:user_id] = data['id']
-            when 'pub'
-              msg = {user_id:data['id'], username:data['username'], text:data['text'], category:data['type'], ip:data['ip'], channel:channel}
-              @msg_list << msg
-              Msg.create(msg)
-            when 'unsub'
-              user_offline message['clientId']
-            else
-              puts "不存在的消息类型: #{data['type']}"
-              return
-          end
+      user = message['data']['user']
+      puts "#{data['type']}:#{data['channel']}\t#{data['username']}:#{data['text']}"
+      case data['type']
+        when 'sub'
+          user_online(channel, user)
+          @clientids[message['clientId']][:user_id] = user['id']
+        when 'pub'
+          msg = {user_id:user['id'], username:user['name'], text:data['text'], category:data['type'], ip:user['ip'], channel:channel}
+          @msg_list << msg
+          Msg.create(msg)
+        when 'unsub'
+          user_offline message['clientId']
+        else
+          puts "不存在的消息类型: #{data['type']}"
+          return
+      end
 
     end
     callback.call(message)
