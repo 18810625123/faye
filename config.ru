@@ -117,13 +117,13 @@ use Faye::RackAdapter, :mount => '/faye', :timeout => 25 do |bayeux|
   bayeux.add_extension($waiter)
 end
 
-Thread.new do
+Thread.start do
   loop do
     t1 = Time.now
     puts '当前时间:'+t1.to_s
     debugger
 
-    sleep 60
+    sleep 10
 
     $waiteronline_users.each do |channel, users|
       users.each do |id, user|
@@ -134,7 +134,7 @@ Thread.new do
         end
       end
     end
-    
+
   end
 end
 
