@@ -25,19 +25,19 @@ class FayeWaiter
       @online_users[channel] = {}
     end
     @clientids = {}
-    Thread.new do
-      loop do
-        sleep 60
-        t1 = Time.now
-        puts '当前时间:'+t1.to_s
-        @online_users.each do |channel, users|
-          users.each do |id, user|
-            t2 = Msg.where("user_id = #{id}").last.created_at
-            puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
-            if (t1 - t2) > 60
-              users.delete id
-            end
-          end
+  end
+
+  def user_exit?
+    debugger
+
+    t1 = Time.now
+    puts '当前时间:'+t1.to_s
+    online_users.each do |channel, users|
+      users.each do |id, user|
+        t2 = Msg.where("user_id = #{id}").last.created_at
+        puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
+        if (t1 - t2) > 60
+          users.delete id
         end
       end
     end
@@ -45,7 +45,6 @@ class FayeWaiter
 
   # 用户通过rails服务器验证后,通知这边,加入列表
   def user_online channel, user
-    debugger
     @online_users[channel].store(user['id'], user)
     puts "用户上线  #{channel}:id(#{user['id']}),name(#{user['name']})"
   end
@@ -132,6 +131,13 @@ $waiter = FayeWaiter.new
 
 use Faye::RackAdapter, :mount => '/faye', :timeout => 25 do |bayeux|
   bayeux.add_extension($waiter)
+end
+
+Thread.new do
+  loop do
+    sleep 60
+    $waiter.user_exit?
+  end
 end
 
 run Rails.application
