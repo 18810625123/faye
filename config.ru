@@ -122,17 +122,15 @@ Thread.start do
     t1 = Time.now
     puts '当前时间:'+t1.to_s
     debugger
-
-    sleep 10
-    puts '11'
+    sleep 20
     $waiter.online_users.each do |channel, users|
-      puts '22'
       users.each do |id, user|
-        t2 = Msg.where("user_id = #{id}").last.created_at
+        # t2 = Msg.where("user_id = #{id}").last.created_at
         puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
-        if (t1 - t2) > 60
+        puts "用户#{id} 下线"
+        # if (t1 - t2) > 60
           users.delete id
-        end
+        # ende
       end
     end
 
