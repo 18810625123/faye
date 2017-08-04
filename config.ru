@@ -26,14 +26,14 @@ class FayeWaiter
     end
     @clientids = {}
     Thread.new do
-      sleep 300
+      sleep 60
       t1 = Time.now
       puts '当前时间:'+t1.to_s
       loop do
         @online_users.each do |channel, users|
           users.each do |id, user|
             t2 = Msg.where("user_id = #{id}").last.created_at
-            puts "#{channel}:#{id}:#{t2.create}"
+            puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
             if (t1 - t2) > 60
               users.delete id
             end
