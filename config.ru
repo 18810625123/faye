@@ -25,6 +25,19 @@ class FayeWaiter
       @online_users[channel] = {}
     end
     @clientids = {}
+    Thread.new do
+      sleep 300
+      time = Time.now
+      loop do
+        @online_users.each do |channel, users|
+          users.each do |id, user|
+            if (time - Msg.where("user_id = #{id}").last.created_at) > 60
+              users.delete id
+            end
+          end
+        end
+      end
+    end
   end
 
   # 用户通过rails服务器验证后,通知这边,加入列表
