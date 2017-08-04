@@ -45,6 +45,7 @@ class FayeWaiter
 
   # 用户通过rails服务器验证后,通知这边,加入列表
   def user_online channel, user
+    debugger
     @online_users[channel].store(user['id'], user)
     puts "用户上线  #{channel}:id(#{user['id']}),name(#{user['name']})"
   end
