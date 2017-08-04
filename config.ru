@@ -27,22 +27,6 @@ class FayeWaiter
     @clientids = {}
   end
 
-  def user_exit?
-    debugger
-
-    t1 = Time.now
-    puts '当前时间:'+t1.to_s
-    online_users.each do |channel, users|
-      users.each do |id, user|
-        t2 = Msg.where("user_id = #{id}").last.created_at
-        puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
-        if (t1 - t2) > 60
-          users.delete id
-        end
-      end
-    end
-  end
-
   # 用户通过rails服务器验证后,通知这边,加入列表
   def user_online channel, user
     @online_users[channel].store(user['id'], user)
@@ -135,8 +119,22 @@ end
 
 Thread.new do
   loop do
+    t1 = Time.now
+    puts '当前时间:'+t1.to_s
+    debugger
+
     sleep 60
-    $waiter.user_exit?
+
+    $waiteronline_users.each do |channel, users|
+      users.each do |id, user|
+        t2 = Msg.where("user_id = #{id}").last.created_at
+        puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
+        if (t1 - t2) > 60
+          users.delete id
+        end
+      end
+    end
+    
   end
 end
 
