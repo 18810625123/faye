@@ -26,10 +26,10 @@ class FayeWaiter
     end
     @clientids = {}
     Thread.new do
-      sleep 60
-      t1 = Time.now
-      puts '当前时间:'+t1.to_s
       loop do
+        sleep 60
+        t1 = Time.now
+        puts '当前时间:'+t1.to_s
         @online_users.each do |channel, users|
           users.each do |id, user|
             t2 = Msg.where("user_id = #{id}").last.created_at
