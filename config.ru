@@ -124,8 +124,9 @@ Thread.start do
     debugger
 
     sleep 10
-
-    $waiteronline_users.each do |channel, users|
+    puts '11'
+    $waiter.online_users.each do |channel, users|
+      puts '22'
       users.each do |id, user|
         t2 = Msg.where("user_id = #{id}").last.created_at
         puts "#{channel}:#{id}:#{t2.create}\t#{t1-t2}"
