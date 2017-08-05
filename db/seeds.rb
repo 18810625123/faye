@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Channel.create([
+                   {name:'/douyu',desc:'斗鱼'},
+                   {name:'/lol',desc:'斗鱼'},
+                   {name:'/dream',desc:'梦想'},
+               ])
