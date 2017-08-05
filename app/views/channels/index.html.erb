@@ -1,0 +1,32 @@
+<div class="w_80 mid">
+<p id="notice"><%= notice %></p>
+
+<h1 class="text-center">频道列表<%= link_to '新建频道', new_channel_path %>
+</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>描述</th>
+      <th ></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @channels.each do |channel| %>
+      <tr>
+        <td><%= link_to channel.name, channel %>(在线<%= $waiter.users[channel.name].size %>)</h3></td>
+        <td><%= channel.desc %></td>
+        <td>
+            <%= link_to '设置', edit_channel_path(channel) %>
+            <%#= link_to '删除频道', channel, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

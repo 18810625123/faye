@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<div>
+  <h3>通道人数:<%= $waiter.users[@channel.name].size %></h3>
+</div>
+<p>
+  <strong>Name:</strong>
+  <%= @channel.name %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @channel.desc %>
+</p>
+
+<div>
+</div>
+<%= link_to 'Edit', edit_channel_path(@channel) %> |
+<%= link_to 'Back', channels_path %>
